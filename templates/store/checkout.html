@@ -1,0 +1,46 @@
+{% extends 'store/base.html' %}
+{% load static %}
+{% block title %}Checkout — BazaarNoon{% endblock %}
+
+{% block content %}
+<div class="page-head">
+  <div>
+    <h1>Checkout</h1>
+    <p id="checkout-sub">Confirm your address, choose how you'd like to pay, and we'll take it from there.</p>
+  </div>
+  <span class="live-chip"><i></i> Secure checkout</span>
+</div>
+
+<div class="checkout-layout">
+  <div class="stack">
+    <section class="step">
+      <div class="step-head">
+        <span class="num">1</span><h2>Delivery address</h2>
+        <span class="done" id="address-done"></span>
+      </div>
+      <div class="step-body" id="address-step">
+        <div class="skeleton sk-line" style="width:50%"></div><div class="skeleton sk-line"></div>
+      </div>
+    </section>
+
+    <section class="step">
+      <div class="step-head"><span class="num">2</span><h2>Payment method</h2></div>
+      <div class="step-body">
+        <div class="pay-grid" id="payment-step"></div>
+        <p class="inline-note" style="margin-top:10px">Online payments are simulated for this demo. Cash on Delivery includes a ₹49 handling fee.</p>
+      </div>
+    </section>
+
+    <section class="step">
+      <div class="step-head"><span class="num">3</span><h2>Review items</h2><span class="done" id="items-done"></span></div>
+      <div class="step-body" id="items-step">
+        <div class="skeleton sk-line"></div><div class="skeleton sk-line" style="width:65%"></div>
+      </div>
+    </section>
+  </div>
+
+  <aside class="card summary" id="checkout-summary"></aside>
+</div>
+{% endblock %}
+
+{% block scripts %}<script type="module" src="{% static 'js/checkout.js' %}"></script>{% endblock %}

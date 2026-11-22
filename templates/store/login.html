@@ -1,0 +1,58 @@
+{% extends 'store/base.html' %}
+{% load static %}
+{% block title %}Sign in — BazaarNoon{% endblock %}
+
+{% block content %}
+<div class="auth-wrap">
+  <div class="auth-card">
+    <h1>Login</h1>
+    <p class="sub">Get access to your orders, wishlist and recommendations.</p>
+
+    <form id="login-form" novalidate>
+      <div class="field">
+        <label for="username">Username</label>
+        <input class="input" id="username" name="username" autocomplete="username" placeholder="e.g. demo" required autofocus>
+      </div>
+      <div class="field">
+        <label for="password">Password</label>
+        <input class="input" id="password" name="password" type="password" autocomplete="current-password" placeholder="Enter your password" required>
+        <span class="hint">By continuing you agree to BazaarNoon's Terms of Use and Privacy Policy.</span>
+      </div>
+      <p class="error-text hidden" id="form-error"></p>
+      <button class="btn btn-primary btn-block btn-lg" type="submit" id="submit-btn">Login</button>
+    </form>
+
+    <p class="auth-foot" style="margin-top:16px">
+      New to BazaarNoon? <a href="{% url 'store:register' %}">Create an account</a>
+    </p>
+
+    <div class="inline-note" style="margin-top:18px">
+      Demo accounts — tap to fill:
+    </div>
+    <div class="pill-row" style="margin-top:8px">
+      <button class="btn btn-sm btn-outline" type="button" data-demo="demo">Customer · demo</button>
+      <button class="btn btn-sm btn-outline" type="button" data-demo="manager">Manager · manager</button>
+      <button class="btn btn-sm btn-outline" type="button" data-demo="admin">Admin · admin</button>
+    </div>
+  </div>
+
+  <aside class="auth-aside">
+    <h2 style="font-size:22px;line-height:1.25">India's everyday marketplace</h2>
+    <p style="color:#dbe7ff;font-size:13.5px;line-height:1.6">
+      One login for your cart, saved addresses, wishlist and live order tracking across
+      19,000+ pincodes.
+    </p>
+    <ul style="display:grid;gap:10px;font-size:13px;color:#eaf1ff;margin-top:6px">
+      <li>✦ Free delivery on orders above ₹499</li>
+      <li>✦ UPI, cards, net banking, EMI and Cash on Delivery</li>
+      <li>✦ 7 day easy returns with doorstep pickup</li>
+      <li>✦ GST invoice on every single order</li>
+    </ul>
+    <p style="font-size:11.5px;color:#b9cdf3;margin-top:auto">
+      Prices in INR, inclusive of GST. Support {{ STORE.support_phone }}.
+    </p>
+  </aside>
+</div>
+{% endblock %}
+
+{% block scripts %}<script type="module" src="{% static 'js/auth.js' %}"></script>{% endblock %}

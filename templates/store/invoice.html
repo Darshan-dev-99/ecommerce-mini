@@ -1,0 +1,104 @@
+{% load static %}<!doctype html>
+<html lang="en-IN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Invoice {{ order.invoice_number|default:order.order_number }} — {{ store.name }}</title>
+  <link rel="stylesheet" href="{% static 'css/app.css' %}">
+</head>
+<body class="printable" style="background:#eef1f6">
+
+<div class="invoice-toolbar no-print" style="max-width:860px;margin:18px auto 0;display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap">
+  <a class="btn btn-sm" href="{% url 'store:order-detail' order.pk %}">← Back to order</a>
+  <button class="btn btn-sm btn-primary" type="button" onclick="window.print()">Print / Save as PDF</button>
+</div>
+
+<div class="invoice-page">
+  <div class="invoice-head">
+    <div>
+      <h1>{{ store.name }}</h1>
+      <p class="small muted" style="margin-top:2px">{{ store.tagline }}</p>
+      <p class="small" style="margin-top:8px;line-height:1.6">
+        {{ store.name }} Retail Pvt Ltd<br>
+        GSTIN {{ store.gst_number }}<br>
+        {{ store.support_email }} · {{ store.support_phone }}
+      </p>
+    </div>
+    <div class="invoice-meta">
+      <strong style="font-size:15px;color:#0f172a">TAX INVOICE</strong>
+      <span>Invoice: {{ order.invoice_number|default:"—" }}</span>
+      <span>Order: {{ order.order_number }}</span>
+      <span>Ordered: {{ order.created_at|date:"d M Y, H:i" }}</span>
+      {% if order.delivered_at %}<span>Delivered: {{ order.delivered_at|date:"d M Y" }}</span>{% endif %}
+      <span>Payment: {{ order.get_payment_method_display }} · {{ order.get_payment_status_display }}</span>
+      {% if order.coupon_code %}<span>Coupon: {{ order.coupon_code }}</span>{% endif %}
+    </div>
+  </div>
+
+  <div class="invoice-grid">
+    <div>
+      <h3>Billed to</h3>
+      <p><strong>{{ order.shipping_name }}</strong></p>
+      <p style="line-height:1.6">{{ order.full_address }}<br>
+        {{ order.shipping_state }} — {{ order.shipping_pincode }}<br>
+        Phone: {{ order.shipping_phone }}</p>
+    </div>
+    <div>
+      <h3>Shipped to</h3>
+      <p><strong>{{ order.shipping_name }}</strong></p>
+      <p style="line-height:1.6">{{ order.full_address }}<br>
+        {{ order.shipping_state }} — {{ order.shipping_pincode }}<br>
+        Phone: {{ order.shipping_phone }}</p>
+    </div>
+  </div>
+
+  <table class="invoice-table">
+    <thead>
+      <tr>
+        <th style="width:34px">#</th>
+        <th>Description</th>
+        <th class="num">Qty</th>
+        <th class="num">Unit price</th>
+        <th class="num">Amount</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in items %}
+      <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>
+          <strong>{{ item.product_name }}</strong>
+          {% if item.product_brand %}<br><span class="muted small">{{ item.product_brand }}</span>{% endif %}
+          {% if item.line_saving %}<br><span class="small" style="color:#388e3c">You saved ₹{{ item.line_saving }}</span>{% endif %}
+        </td>
+        <td class="num">{{ item.quantity }}</td>
+        <td class="num">₹{{ item.unit_price }}</td>
+        <td class="num">₹{{ item.line_total }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div class="invoice-totals">
+    <div><span>Subtotal</span><span>₹{{ order.subtotal }}</span></div>
+    {% if order.discount_amount %}<div><span>Coupon discount</span><span style="color:#388e3c">− ₹{{ order.discount_amount }}</span></div>{% endif %}
+    <div><span>Delivery</span><span>{% if order.delivery_fee %}₹{{ order.delivery_fee }}{% else %}FREE{% endif %}</span></div>
+    {% if order.cod_fee %}<div><span>COD handling</span><span>₹{{ order.cod_fee }}</span></div>{% endif %}
+    <div><span>GST {% widthratio store.gst_rate 1 100 %}% (included)</span><span>₹{{ order.gst_amount }}</span></div>
+    <div class="grand"><span>Total paid</span><span>₹{{ order.total_amount }}</span></div>
+  </div>
+
+  <p class="invoice-note">
+    All amounts are in Indian Rupees (INR) and include GST at {% widthratio store.gst_rate 1 100 %}%
+    under the inclusive pricing scheme. This is a computer-generated invoice and does not require a
+    physical signature. For returns raise a request from the order page within 7 days of delivery —
+    pickup is arranged at no cost. Questions? Call {{ store.support_phone }} or write to
+    {{ store.support_email }}.
+  </p>
+</div>
+
+<div class="no-print" style="text-align:center;padding:20px">
+  <span class="small muted">Tip: choose “Save as PDF” as the destination to keep a digital copy.</span>
+</div>
+</body>
+</html>

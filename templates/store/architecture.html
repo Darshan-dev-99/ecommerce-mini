@@ -1,0 +1,115 @@
+{% extends 'store/base.html' %}
+{% load static %}
+{% block title %}How a request works — BazaarNoon architecture{% endblock %}
+
+{% block content %}
+<section class="arch-hero">
+  <h1>How a BazaarNoon request works</h1>
+  <p>
+    Every catalogue read is cache-aside: the browser calls the REST API, the API checks the cache first,
+    and only a miss touches the database — after which the result is written back into the cache for the
+    next shopper. The numbers below are read from the live cache, not a mock-up.
+  </p>
+  <div class="badges" id="arch-badges">
+    <span>Browser · vanilla JS fetch()</span>
+    <span>Django REST framework</span>
+    <span>Redis · versioned keys</span>
+    <span>PostgreSQL · source of truth</span>
+  </div>
+</section>
+
+<section class="arch-figure">
+  <img src="{% static 'img/request-flow.svg' %}" width="1200" height="620"
+       alt="Diagram: browser calls the Django API, the API checks Redis, a cache miss queries PostgreSQL and fills the cache">
+</section>
+
+<div class="arch-grid section-gap">
+  <section class="card pad">
+    <div class="section-head">
+      <h2 style="font-size:17px">Run the path for real</h2>
+      <button class="btn btn-sm btn-primary" type="button" id="sim-run">Send a test request</button>
+    </div>
+    <p class="inline-note" style="margin-bottom:12px">
+      The first click usually reports a MISS (cold key), the second a HIT — exactly what happens to a shopper
+      loading the product grid twice.
+    </p>
+    <div class="flow" id="flow">
+      <div class="flow-step">
+        <span class="flow-ico">1</span>
+        <div class="flow-body"><b>Browser → GET /api/products/</b>
+          <span class="inline-note">fetch() with credentials: same-origin</span></div>
+        <span class="flow-ms">—</span>
+      </div>
+      <div class="flow-step">
+        <span class="flow-ico">2</span>
+        <div class="flow-body"><b>API checks the cache</b>
+          <span class="inline-note">Click “Send a test request” to measure the real lookup.</span></div>
+        <span class="flow-ms">—</span>
+      </div>
+    </div>
+    <div class="arch-note">
+      <span>ℹ️</span>
+      <span><b>Versioned keys:</b> every key embeds <code>catalog:version</code>. A product, order or coupon write
+        increments that counter, so the entire namespace goes stale in a single <code>INCR</code> — no key scans.</span>
+    </div>
+  </section>
+
+  <div class="stack">
+    <section class="card pad">
+      <div class="section-head">
+        <h2 style="font-size:15px">Live cache telemetry</h2>
+        <span class="live-chip" id="live-stamp"><i></i> Live</span>
+      </div>
+      <div class="stat-tiles" id="stat-tiles">
+        <div class="stat-tile"><div class="label">Hit rate</div><div class="value">—</div></div>
+        <div class="stat-tile"><div class="label">Hits</div><div class="value">—</div></div>
+        <div class="stat-tile"><div class="label">Misses</div><div class="value">—</div></div>
+        <div class="stat-tile"><div class="label">Keys</div><div class="value">—</div></div>
+      </div>
+      <div class="pill-row" style="margin-top:12px">
+        <button class="btn btn-sm btn-outline" type="button" id="warm">Warm cache</button>
+        <button class="btn btn-sm" type="button" id="reset">Reset telemetry</button>
+        <button class="btn btn-sm" type="button" id="health">Health check</button>
+      </div>
+      <div class="mini-stat" style="margin-top:12px" id="health-out">
+        <span>Cache: <b id="h-cache">…</b></span><span>DB: <b id="h-db">…</b></span>
+      </div>
+    </section>
+
+    <section class="card pad">
+      <h2 style="font-size:15px;margin-bottom:10px">Layers</h2>
+      <div class="stack" style="gap:8px" id="layers"></div>
+    </section>
+  </div>
+</div>
+
+<div class="grid-2 section-gap">
+  <section class="card pad">
+    <h2 style="font-size:17px;margin-bottom:10px">Cache-aside in one function</h2>
+    <pre class="mono" style="background:#0f172a;color:#dbe7ff;padding:16px;border-radius:10px;overflow:auto;line-height:1.6">
+def cache_aside(namespace, payload, producer, ttl):
+    value, hit = get_cached(namespace, payload)   # cache.get(key)
+    if hit:
+        return value, True                        # HIT  → no DB
+    value = producer()                            # MISS → SELECT …
+    set_cached(namespace, payload, value, ttl)    # cache.set(key, ttl)
+    return value, False</pre>
+    <p class="inline-note" style="margin-top:10px">Backend is chosen at startup: Redis when <code>REDIS_URL</code> is set,
+      Django's in-process cache otherwise, so the same code runs with or without services.</p>
+  </section>
+
+  <section class="card pad">
+    <h2 style="font-size:17px;margin-bottom:10px">Configured TTLs</h2>
+    <div class="table-wrap">
+      <table class="data" id="ttl-table">
+        <thead><tr><th>Fragment</th><th class="num">TTL</th><th>Invalidated by</th></tr></thead>
+        <tbody><tr><td colspan="3" class="muted">Loading…</td></tr></tbody>
+      </table>
+    </div>
+    <p class="inline-note" style="margin-top:10px">Docker: <code>docker compose up</code> boots PostgreSQL 16 + Redis 7 and
+      sets <code>DATABASE_URL</code> and <code>REDIS_URL</code> for the web service.</p>
+  </section>
+</div>
+{% endblock %}
+
+{% block scripts %}<script type="module" src="{% static 'js/architecture.js' %}"></script>{% endblock %}

@@ -1,0 +1,50 @@
+{% extends 'store/base.html' %}
+{% load static %}
+{% block title %}Offers &amp; coupons — BazaarNoon{% endblock %}
+
+{% block content %}
+<div class="page-head">
+  <div>
+    <h1>Offers &amp; coupons</h1>
+    <p>Live coupon codes, bank offers and festive deals — applied at checkout in one tap.</p>
+  </div>
+  <a class="link" href="/shop/?ordering=discount">Shop all deals →</a>
+</div>
+
+<section class="offer-cards" id="coupon-cards">
+  <div class="skeleton" style="height:130px"></div>
+  <div class="skeleton" style="height:130px"></div>
+  <div class="skeleton" style="height:130px"></div>
+</section>
+
+<div class="grid-2 section-gap">
+  <section class="card pad">
+    <div class="section-head"><h2 style="font-size:17px">Bank &amp; payment offers</h2></div>
+    <div class="offer-strip">
+      <div class="offer-line"><span class="ico">💳</span><span><b>10% instant discount</b> on HDFC Bank credit cards, up to ₹1,500 on orders above ₹4,999.</span></div>
+      <div class="offer-line"><span class="ico">📲</span><span><b>₹75 cashback</b> on first UPI payment above ₹499 via Google Pay or PhonePe.</span></div>
+      <div class="offer-line"><span class="ico">🏦</span><span><b>₹250 off</b> on ICICI net banking transactions above ₹2,999.</span></div>
+      <div class="offer-line"><span class="ico">🗓️</span><span><b>No cost EMI</b> from ₹499/month on select mobiles and large appliances.</span></div>
+      <div class="offer-line"><span class="ico">🎁</span><span><b>Extra 5% off</b> for BazaarNoon Plus members on fashion and beauty.</span></div>
+    </div>
+  </section>
+
+  <section class="card pad">
+    <div class="section-head"><h2 style="font-size:17px">How coupons work</h2></div>
+    <div class="stack" style="gap:10px;font-size:13px;color:var(--ink-soft)">
+      <p>1. Copy a code from this page or pick one on the cart.</p>
+      <p>2. The discount is recalculated against your live cart subtotal.</p>
+      <p>3. Minimum order values and per-customer limits are enforced by the API.</p>
+      <p class="muted small">Coupons cannot be clubbed with another coupon code. GST is computed on the final payable amount.</p>
+    </div>
+  </section>
+</div>
+
+<section class="card pad section-gap">
+  <div class="section-head"><h2 style="font-size:17px">Shop festive categories</h2>
+    <a class="link" href="/shop/">All categories →</a></div>
+  <div class="cat-circles" id="offer-categories"></div>
+</section>
+{% endblock %}
+
+{% block scripts %}<script type="module" src="{% static 'js/offers.js' %}"></script>{% endblock %}

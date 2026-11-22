@@ -1,0 +1,135 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 620" role="img" aria-labelledby="t d" font-family="Inter, Segoe UI, Arial, sans-serif">
+  <title id="t">BazaarNoon request flow — Browser, Django API, Redis cache, PostgreSQL</title>
+  <desc id="d">A browser calls the REST API. The API checks Redis. On a cache hit the API returns immediately. On a cache miss the API queries PostgreSQL, writes the result back into Redis, and returns the response.</desc>
+
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#2874f0"/>
+    </marker>
+    <marker id="arrowGreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#388e3c"/>
+    </marker>
+    <marker id="arrowAmber" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#b26a00"/>
+    </marker>
+    <linearGradient id="apiFill" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2874f0"/><stop offset="1" stop-color="#1a5dc8"/>
+    </linearGradient>
+    <linearGradient id="dbFill" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#336791"/><stop offset="1" stop-color="#244a68"/>
+    </linearGradient>
+    <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="3" stdDeviation="6" flood-color="#0f172a" flood-opacity="0.16"/>
+    </filter>
+    <style>
+      .box-label { fill:#0f172a; font-size:17px; font-weight:800; }
+      .box-sub { fill:#64748b; font-size:12px; font-weight:600; }
+      .box-sub-light { fill:#dbe7ff; font-size:12px; font-weight:600; }
+      .box-sub-mono { fill:#c9d6ef; font-size:11px; font-family:ui-monospace,Menlo,monospace; }
+      .edge { fill:none; stroke:#2874f0; stroke-width:2.2; }
+      .edge-green { fill:none; stroke:#388e3c; stroke-width:2.2; }
+      .edge-amber { fill:none; stroke:#b26a00; stroke-width:2.2; stroke-dasharray:7 5; }
+      .edge-return { fill:none; stroke:#94a3b8; stroke-width:2; stroke-dasharray:5 5; }
+      .tag { fill:#334155; font-size:12.5px; font-weight:600; }
+      .tag-green { fill:#2e7d32; font-size:12.5px; font-weight:700; }
+      .tag-amber { fill:#b26a00; font-size:12.5px; font-weight:700; }
+      .mono { font-family:ui-monospace,Menlo,monospace; font-size:11.5px; }
+      .pill-green { fill:#e8f5e9; stroke:#a5d6a7; }
+      .pill-amber { fill:#fff7e6; stroke:#f0c987; }
+      .pill-blue { fill:#eaf1ff; stroke:#bcd3fa; }
+    </style>
+  </defs>
+
+  <rect width="1200" height="620" rx="16" fill="#f8fafc"/>
+  <text x="36" y="46" style="font-size:22px;font-weight:800;fill:#0f172a">Web request lifecycle</text>
+  <text x="36" y="70" style="font-size:13px;fill:#64748b">
+    Browser calls the API → the API checks Redis → on a cache miss PostgreSQL is queried and the cache is filled
+  </text>
+
+  <!-- ============================== nodes ============================== -->
+
+  <!-- browser -->
+  <g filter="url(#soft)">
+    <rect x="36" y="150" width="180" height="124" rx="12" fill="#ffffff" stroke="#e2e8f0"/>
+  </g>
+  <rect x="36" y="150" width="180" height="6" rx="3" fill="#fb641b"/>
+  <text x="58" y="192" class="box-label">Browser</text>
+  <text x="58" y="212" class="box-sub">vanilla JS · fetch()</text>
+  <text x="58" y="232" class="box-sub">ES modules · csrftoken</text>
+  <text x="58" y="256" class="box-sub-mono">GET /api/products/</text>
+
+  <!-- API -->
+  <g filter="url(#soft)">
+    <rect x="300" y="150" width="210" height="124" rx="12" fill="url(#apiFill)"/>
+  </g>
+  <text x="322" y="192" style="fill:#fff;font-size:17px;font-weight:800">Django REST API</text>
+  <text x="322" y="214" class="box-sub-light">cache-aside helper</text>
+  <text x="322" y="234" class="box-sub-mono">ProductViewSet.list()</text>
+  <text x="322" y="256" class="box-sub-mono">X-Cache: HIT | MISS</text>
+
+  <!-- Redis -->
+  <g filter="url(#soft)">
+    <rect x="590" y="150" width="190" height="124" rx="12" fill="#ffffff" stroke="#e2e8f0"/>
+  </g>
+  <rect x="590" y="150" width="190" height="6" rx="3" fill="#d82c20"/>
+  <text x="612" y="192" class="box-label">Redis cache</text>
+  <text x="612" y="212" class="box-sub">in-process fallback</text>
+  <text x="612" y="232" class="box-sub">when REDIS_URL unset</text>
+  <text x="612" y="256" class="box-sub-mono">catalog:products:v7:9f2c…</text>
+
+  <!-- PostgreSQL -->
+  <g filter="url(#soft)">
+    <rect x="300" y="400" width="210" height="128" rx="12" fill="url(#dbFill)"/>
+  </g>
+  <text x="322" y="442" style="fill:#fff;font-size:17px;font-weight:800">PostgreSQL</text>
+  <text x="322" y="464" class="box-sub-light">source of truth · 17 tables</text>
+  <text x="322" y="484" class="box-sub-mono">SELECT … FROM store_product</text>
+  <text x="322" y="504" class="box-sub-mono">WHERE is_active ORDER BY …</text>
+
+  <!-- ============================== edges ============================== -->
+
+  <!-- 0. browser -> api -->
+  <path d="M216 212 H 292" class="edge" marker-end="url(#arrow)"/>
+  <text x="222" y="200" class="tag">fetch()</text>
+
+  <!-- 1. api -> cache lookup -->
+  <path d="M510 196 H 582" class="edge" marker-end="url(#arrow)"/>
+  <text x="512" y="186" class="tag">1 · cache.get(key)</text>
+  <rect x="512" y="222" width="52" height="20" rx="10" class="pill-blue"/>
+  <text x="520" y="236" class="mono" style="fill:#2874f0">0.3 ms</text>
+
+  <!-- 2a. HIT return -->
+  <path d="M590 246 H 516" class="edge-green" marker-end="url(#arrowGreen)"/>
+  <text x="556" y="300" class="tag-green">HIT → return cached JSON immediately</text>
+
+  <!-- 2b. MISS -> database -->
+  <path d="M405 274 V 392" class="edge-amber" marker-end="url(#arrowAmber)"/>
+  <text x="418" y="330" class="tag-amber">2 · MISS → query PostgreSQL</text>
+  <rect x="418" y="342" width="62" height="20" rx="10" class="pill-amber"/>
+  <text x="427" y="356" class="mono" style="fill:#b26a00">~12 ms</text>
+
+  <!-- 3. backfill cache -->
+  <path d="M510 464 H 760 V 282" class="edge-green" stroke-dasharray="7 5" marker-end="url(#arrowGreen)"/>
+  <text x="560" y="452" class="tag-green">3 · cache.set(key, value, ttl)</text>
+  <text x="560" y="430" class="mono" style="fill:#64748b">TTL 60 s · versioned key</text>
+
+  <!-- 4. response back to browser -->
+  <path d="M405 150 V 96 H 126 V 142" class="edge-return" marker-end="url(#arrow)"/>
+  <text x="150" y="88" class="tag">200 OK · JSON · X-Cache: MISS</text>
+
+  <!-- ============================== legend / notes ============================== -->
+
+  <line x1="36" y1="556" x2="1164" y2="556" stroke="#e2e8f0"/>
+
+  <g transform="translate(36,572)">
+    <line x1="0" y1="0" x2="34" y2="0" stroke="#2874f0" stroke-width="2.2" marker-end="url(#arrow)"/>
+    <text x="44" y="4" style="font-size:12px;fill:#334155">request path</text>
+    <line x1="150" y1="0" x2="184" y2="0" stroke="#388e3c" stroke-width="2.2" marker-end="url(#arrowGreen)"/>
+    <text x="194" y="4" style="font-size:12px;fill:#2e7d32">cache hit / backfill</text>
+    <line x1="330" y1="0" x2="364" y2="0" stroke="#b26a00" stroke-width="2.2" stroke-dasharray="7 5" marker-end="url(#arrowAmber)"/>
+    <text x="374" y="4" style="font-size:12px;fill:#b26a00">cache miss</text>
+    <text x="470" y="4" style="font-size:12px;fill:#64748b">Invalidation: any Product / Order write runs</text>
+    <text x="786" y="4" class="mono" style="fill:#2874f0">INCR catalog:version</text>
+    <text x="944" y="4" style="font-size:12px;fill:#64748b">→ every key expires in O(1)</text>
+  </g>
+</svg>

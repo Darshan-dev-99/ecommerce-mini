@@ -1,0 +1,55 @@
+{% extends 'store/base.html' %}
+{% load static %}
+{% block title %}Orders — BazaarNoon seller console{% endblock %}
+
+{% block content %}
+<div class="console">
+  {% include 'store/_console_nav.html' %}
+
+  <section class="stack">
+    <div class="page-head">
+      <div>
+        <h1>Order fulfilment</h1>
+        <p id="orders-sub">Loading the order book…</p>
+      </div>
+      <div class="pill-row">
+        <span class="live-chip"><i></i> Live book</span>
+        <button class="btn btn-sm" type="button" id="orders-refresh">Refresh</button>
+      </div>
+    </div>
+
+    <div class="tabs" id="order-tabs">
+      <button class="tab is-on" type="button" data-status="all">All</button>
+    </div>
+
+    <div class="toolbar">
+      <form class="grow" id="order-search-form" style="display:flex;gap:8px">
+        <input class="input" id="order-search" type="search" placeholder="Search order number or customer name" aria-label="Search orders">
+        <button class="btn btn-sm btn-primary" type="submit">Search</button>
+      </form>
+      <span class="small muted" id="orders-count"></span>
+    </div>
+
+    <div class="card">
+      <div class="table-wrap">
+        <table class="data" id="orders-table">
+          <thead>
+            <tr>
+              <th>Order</th><th>Customer</th><th>Items</th><th>Placed</th>
+              <th>Payment</th><th class="num">Total</th><th>Status</th><th>Action</th>
+            </tr>
+          </thead>
+          <tbody><tr><td colspan="8" class="muted">Loading…</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <p class="inline-note">
+      The customer's tracking page listens on a Server-Sent Events stream, so any status change
+      below appears on their screen within a few seconds — no refresh needed.
+    </p>
+  </section>
+</div>
+{% endblock %}
+
+{% block scripts %}<script type="module" src="{% static 'js/manage-orders.js' %}"></script>{% endblock %}

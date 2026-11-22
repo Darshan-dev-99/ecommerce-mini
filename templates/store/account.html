@@ -1,0 +1,49 @@
+{% extends 'store/base.html' %}
+{% load static %}
+{% block title %}My account — BazaarNoon{% endblock %}
+
+{% block content %}
+<div class="account-layout">
+  <nav class="account-nav" aria-label="Account">
+    <div class="who">
+      <b id="acc-name">Loading…</b>
+      <span class="muted small" id="acc-email"></span>
+    </div>
+    <a href="#profile" data-nav-link="profile" class="is-on">👤 Profile</a>
+    <a href="#addresses" data-nav-link="addresses">📍 Addresses</a>
+    <a href="/orders/">📦 My orders</a>
+    <a href="/wishlist/">♥ Wishlist</a>
+    <a href="/shop/">🛍️ Continue shopping</a>
+    <a href="/manage/" data-admin-only>🏪 Seller console</a>
+  </nav>
+
+  <div class="stack">
+    <section class="card pad" id="profile">
+      <div class="section-head"><h2 style="font-size:17px">Profile details</h2>
+        <span class="muted small">Used on invoices and delivery labels</span></div>
+      <form id="profile-form">
+        <div class="form-grid">
+          <div class="field"><label for="pf-first">First name</label><input id="pf-first" name="first_name" required></div>
+          <div class="field"><label for="pf-last">Last name</label><input id="pf-last" name="last_name"></div>
+          <div class="field"><label for="pf-email">Email</label><input id="pf-email" name="email" type="email"></div>
+          <div class="field"><label for="pf-phone">Mobile</label>
+            <input id="pf-phone" name="phone" inputmode="numeric" maxlength="10" placeholder="10 digit mobile"></div>
+        </div>
+        <div class="form-actions">
+          <button class="btn btn-primary" type="submit">Save changes</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="card pad" id="addresses">
+      <div class="section-head">
+        <h2 style="font-size:17px">Saved addresses</h2>
+        <button class="btn btn-sm btn-outline" type="button" id="add-address">+ Add address</button>
+      </div>
+      <div class="address-grid" id="address-grid"></div>
+    </section>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}<script type="module" src="{% static 'js/account.js' %}"></script>{% endblock %}

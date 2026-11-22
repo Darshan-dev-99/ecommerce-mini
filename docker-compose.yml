@@ -1,0 +1,58 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: bazaarnoon
+      POSTGRES_USER: bazaarnoon
+      POSTGRES_PASSWORD: bazaarnoon
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U bazaarnoon -d bazaarnoon"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes", "--maxmemory", "256mb", "--maxmemory-policy", "allkeys-lru"]
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+    ports:
+      - "6379:6379"
+
+  web:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      DJANGO_ENV: prod
+      DJANGO_DEBUG: "0"
+      DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY:-dev-only-insecure-key-change-me}
+      DJANGO_ALLOW_ALL_HOSTS: "1"
+      DATABASE_URL: postgres://bazaarnoon:bazaarnoon@db:5432/bazaarnoon
+      REDIS_URL: redis://redis:6379/1
+      COD_MAX_ORDER_VALUE: "50000"
+      FREE_DELIVERY_THRESHOLD: "499"
+    ports:
+      - "8000:8000"
+    volumes:
+      - staticfiles:/app/staticfiles
+
+volumes:
+  pgdata:
+  redisdata:
+  staticfiles:

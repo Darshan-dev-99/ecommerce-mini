@@ -1,0 +1,20 @@
+{% extends 'store/base.html' %}
+{% load static %}
+{% block title %}My wishlist — BazaarNoon{% endblock %}
+
+{% block content %}
+<div class="page-head">
+  <div>
+    <h1>My wishlist</h1>
+    <p id="wish-sub">Products you saved for later — move them to your cart in one click.</p>
+  </div>
+  <a class="link" href="/shop/">Continue shopping →</a>
+</div>
+
+<div class="grid-products" id="wish-grid">
+  <div class="skeleton sk-card"></div><div class="skeleton sk-card"></div>
+  <div class="skeleton sk-card"></div><div class="skeleton sk-card"></div>
+</div>
+{% endblock %}
+
+{% block scripts %}<script type="module" src="{% static 'js/wishlist.js' %}"></script>{% endblock %}

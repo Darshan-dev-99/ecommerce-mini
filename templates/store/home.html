@@ -1,0 +1,64 @@
+{% extends 'store/base.html' %}
+{% load static %}
+{% block title %}BazaarNoon — India's everyday marketplace{% endblock %}
+
+{% block content %}
+<section class="hero" id="hero">
+  <div class="hero-copy">
+    <span class="hero-eyebrow" id="hero-eyebrow">✦ Big Billion Days · 12–16 Nov</span>
+    <h1 id="hero-title">Festive sale on everything you love. <span>Up to 80% off.</span></h1>
+    <p id="hero-copy-line">Mobiles, laptops, fashion, furniture and daily essentials — free delivery above ₹499, easy 7 day returns and Cash on Delivery across 19,000+ pincodes.</p>
+    <div class="hero-cta">
+      <a class="btn btn-cart btn-lg" href="/shop/?ordering=discount">Shop deals of the day</a>
+      <a class="btn btn-lg" href="/offers/">View bank offers</a>
+    </div>
+  </div>
+  <div class="hero-art">
+    <img id="hero-art" alt="Featured product of the day" src="" hidden>
+  </div>
+  <div class="hero-dots" id="hero-dots" aria-hidden="true"></div>
+</section>
+
+<section class="card pad" aria-label="Shop by category">
+  <div class="section-head">
+    <h2>Shop by category</h2>
+    <a class="link" href="/shop/">View all products →</a>
+  </div>
+  <div class="cat-circles" id="home-categories">
+    <div class="skeleton sk-line" style="height:82px"></div>
+    <div class="skeleton sk-line" style="height:82px"></div>
+    <div class="skeleton sk-line" style="height:82px"></div>
+    <div class="skeleton sk-line" style="height:82px"></div>
+    <div class="skeleton sk-line" style="height:82px"></div>
+    <div class="skeleton sk-line" style="height:82px"></div>
+    <div class="skeleton sk-line" style="height:82px"></div>
+    <div class="skeleton sk-line" style="height:82px"></div>
+  </div>
+</section>
+
+<div class="offer-cards" id="home-offers" style="margin-top:16px"></div>
+
+<div id="home-rails"></div>
+
+<section class="trust-row" aria-label="Why shop with us">
+  <div class="trust"><span class="ico">🚚</span><div><b>Free delivery above ₹499</b><span>Delivered in 2–5 days by our logistics partners</span></div></div>
+  <div class="trust"><span class="ico">💵</span><div><b>Cash on Delivery</b><span>Pay at your door · ₹49 handling fee on COD</span></div></div>
+  <div class="trust"><span class="ico">↺</span><div><b>7 day easy returns</b><span>Free pickup and instant refunds to source</span></div></div>
+  <div class="trust"><span class="ico">🛡️</span><div><b>GST invoice + brand warranty</b><span>Genuine products, manufacturer warranty only</span></div></div>
+</section>
+
+<section class="card pad section-gap">
+  <div class="section-head">
+    <h2>Top brands on BazaarNoon</h2>
+    <a class="link" href="/shop/">Browse everything →</a>
+  </div>
+  <div class="brand-strip" id="home-brands"></div>
+</section>
+
+<section class="rail-section" id="recent-section" hidden>
+  <div class="section-head"><h2>Recently viewed</h2></div>
+  <div class="rail" id="recent-rail"></div>
+</section>
+{% endblock %}
+
+{% block scripts %}<script type="module" src="{% static 'js/home.js' %}"></script>{% endblock %}

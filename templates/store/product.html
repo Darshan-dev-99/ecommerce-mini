@@ -1,0 +1,23 @@
+{% extends 'store/base.html' %}
+{% load static %}
+{% block title %}Product — BazaarNoon{% endblock %}
+
+{% block content %}
+<div class="breadcrumb" id="crumb">
+  <a href="/">Home</a><span>›</span><a href="/shop/">All products</a><span>›</span><span>Loading…</span>
+</div>
+
+<div id="product-root">
+  <div class="pdp">
+    <div class="skeleton" style="height:460px"></div>
+    <div class="skeleton" style="height:460px"></div>
+  </div>
+</div>
+
+<div id="product-extra"></div>
+{% endblock %}
+
+{% block scripts %}
+<script>window.PRODUCT_SLUG = "{{ slug|escapejs }}";</script>
+<script type="module" src="{% static 'js/product.js' %}"></script>
+{% endblock %}

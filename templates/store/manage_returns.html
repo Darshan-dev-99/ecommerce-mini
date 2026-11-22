@@ -1,0 +1,37 @@
+{% extends 'store/base.html' %}
+{% load static %}
+{% block title %}Returns — BazaarNoon seller console{% endblock %}
+
+{% block content %}
+<div class="console">
+  {% include 'store/_console_nav.html' %}
+
+  <section class="stack">
+    <div class="page-head">
+      <div>
+        <h1>Returns &amp; refunds</h1>
+        <p id="returns-sub">Loading the returns desk…</p>
+      </div>
+      <div class="pill-row">
+        <button class="btn btn-sm" type="button" id="returns-refresh">Refresh</button>
+      </div>
+    </div>
+
+    <div class="tabs" id="return-tabs">
+      <button class="tab is-on" type="button" data-status="all">All</button>
+    </div>
+
+    <div id="return-list" class="stack">
+      <div class="card pad"><p class="muted small">Loading return requests…</p></div>
+    </div>
+
+    <p class="inline-note">
+      Approving a return moves the order to “Return requested” and schedules a pickup. Refunding
+      restores the stock and marks the payment refunded — both actions are written to the order
+      timeline the customer is watching.
+    </p>
+  </section>
+</div>
+{% endblock %}
+
+{% block scripts %}<script type="module" src="{% static 'js/manage-returns.js' %}"></script>{% endblock %}

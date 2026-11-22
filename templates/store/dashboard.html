@@ -1,0 +1,107 @@
+{% extends 'store/base.html' %}
+{% load static %}
+{% block title %}Seller dashboard — BazaarNoon{% endblock %}
+
+{% block content %}
+<div class="console">
+  {% include 'store/_console_nav.html' %}
+
+  <section class="stack">
+    <div class="page-head">
+      <div>
+        <h1>Seller dashboard</h1>
+        <p id="dash-sub">Loading live metrics from the API…</p>
+      </div>
+      <div class="pill-row">
+        <span class="live-chip" id="pulse-chip"><i></i> Live</span>
+        <button class="btn btn-sm" type="button" id="dash-refresh">Refresh</button>
+        <a class="btn btn-sm btn-primary" href="{% url 'store:manage-orders' %}">Fulfil orders</a>
+      </div>
+    </div>
+
+    <div class="kpi-grid" id="kpi-grid">
+      <div class="kpi"><span class="label">Loading</span><span class="value">—</span></div>
+    </div>
+
+    <div class="card pad">
+      <div class="section-head">
+        <h2 style="font-size:16px">Revenue · last 14 days</h2>
+        <span class="small muted" id="chart-total"></span>
+      </div>
+      <div class="chart" id="revenue-chart"></div>
+      <div class="chart-legend"><span>14 days ago</span><span>Today</span></div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card pad">
+        <div class="section-head">
+          <h2 style="font-size:16px">Live order pulse</h2>
+          <span class="small muted" id="pulse-stamp">—</span>
+        </div>
+        <div class="mini-stat" style="margin-bottom:10px">
+          <span>Open orders: <b id="pulse-active">—</b></span>
+          <span>Latest: <b id="pulse-latest">—</b></span>
+        </div>
+        <div id="pulse-feed"><p class="muted small">Listening for new orders…</p></div>
+      </div>
+
+      <div class="card pad">
+        <div class="section-head"><h2 style="font-size:16px">Order pipeline</h2></div>
+        <div id="status-breakdown"><p class="muted small">Loading…</p></div>
+        <div class="pill-row" style="margin-top:12px">
+          <a class="btn btn-sm btn-outline" href="{% url 'store:manage-orders' %}">Open fulfilment desk</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="card pad">
+      <div class="section-head">
+        <h2 style="font-size:16px">Recent orders</h2>
+        <a class="link" href="{% url 'store:manage-orders' %}">View all</a>
+      </div>
+      <div class="table-wrap">
+        <table class="data" id="recent-orders">
+          <thead>
+            <tr><th>Order</th><th>Customer</th><th>Placed</th><th>Payment</th><th class="num">Total</th><th>Status</th></tr>
+          </thead>
+          <tbody><tr><td colspan="6" class="muted">Loading…</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card pad">
+        <div class="section-head">
+          <h2 style="font-size:16px">Low stock alerts</h2>
+          <a class="link" href="{% url 'store:manage-products' %}?stock=low">Restock</a>
+        </div>
+        <div id="low-stock"><p class="muted small">Loading…</p></div>
+      </div>
+      <div class="card pad">
+        <div class="section-head">
+          <h2 style="font-size:16px">Top sellers</h2>
+          <a class="link" href="{% url 'store:manage-products' %}">Manage</a>
+        </div>
+        <div id="top-products"><p class="muted small">Loading…</p></div>
+      </div>
+    </div>
+
+    <div class="card pad">
+      <div class="section-head">
+        <h2 style="font-size:16px">Top customers by lifetime spend</h2>
+        <span class="small muted" id="customer-count"></span>
+      </div>
+      <div class="table-wrap">
+        <table class="data" id="customers">
+          <thead>
+            <tr><th>Customer</th><th>Contact</th><th>Joined</th><th class="num">Orders</th><th class="num">Spend</th></tr>
+          </thead>
+          <tbody><tr><td colspan="5" class="muted">Loading…</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+</div>
+{% endblock %}
+
+{% block scripts %}<script type="module" src="{% static 'js/dashboard.js' %}"></script>{% endblock %}

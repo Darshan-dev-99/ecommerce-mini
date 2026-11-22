@@ -1,0 +1,23 @@
+{% extends 'store/base.html' %}
+{% load static %}
+{% block title %}My orders — BazaarNoon{% endblock %}
+
+{% block content %}
+<div class="page-head">
+  <div>
+    <h1>My orders</h1>
+    <p id="orders-sub">Track deliveries live, download GST invoices and raise returns.</p>
+  </div>
+  <form class="search-inline" id="order-search-form" autocomplete="off">
+    <input id="order-search" type="search" placeholder="Search order number" aria-label="Search orders">
+    <button class="btn btn-primary" type="submit">Search</button>
+  </form>
+</div>
+
+<div class="tabs" id="order-tabs" role="tablist"></div>
+<div id="order-list">
+  <div class="card pad section-gap"><div class="skeleton sk-line" style="width:35%"></div><div class="skeleton sk-line"></div></div>
+</div>
+{% endblock %}
+
+{% block scripts %}<script type="module" src="{% static 'js/orders.js' %}"></script>{% endblock %}

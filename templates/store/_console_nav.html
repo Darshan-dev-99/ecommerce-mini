@@ -1,0 +1,16 @@
+{% load static %}
+<aside class="console-nav">
+  <a class="brand" href="{% url 'store:dashboard' %}">BazaarNoon <span style="color:#7fb0ff">Seller</span></a>
+  <a href="{% url 'store:dashboard' %}" class="{% if nav == 'dashboard' %}is-on{% endif %}">📊 Dashboard</a>
+  <a href="{% url 'store:manage-orders' %}" class="{% if nav == 'manage_orders' %}is-on{% endif %}">📦 Orders</a>
+  <a href="{% url 'store:manage-products' %}" class="{% if nav == 'manage_products' %}is-on{% endif %}">🏷️ Products</a>
+  <a href="{% url 'store:manage-coupons' %}" class="{% if nav == 'manage_coupons' %}is-on{% endif %}">🎟️ Coupons</a>
+  <a href="{% url 'store:manage-returns' %}" class="{% if nav == 'manage_returns' %}is-on{% endif %}">↩️ Returns</a>
+  <a href="{% url 'store:shop' %}">🛍️ Storefront</a>
+  <a href="{% url 'store:architecture' %}">⚙️ Architecture</a>
+  <div class="foot">
+    Signed in as <b style="color:#fff">{{ request.user.get_full_name|default:request.user.username }}</b><br>
+    Cache: {{ CACHE_LABEL }}<br>
+    DB: {{ DATABASE_LABEL }}
+  </div>
+</aside>

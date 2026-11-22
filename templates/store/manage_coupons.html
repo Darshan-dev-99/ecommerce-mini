@@ -1,0 +1,57 @@
+{% extends 'store/base.html' %}
+{% load static %}
+{% block title %}Coupons — BazaarNoon seller console{% endblock %}
+
+{% block content %}
+<div class="console">
+  {% include 'store/_console_nav.html' %}
+
+  <section class="stack">
+    <div class="page-head">
+      <div>
+        <h1>Coupons &amp; promotions</h1>
+        <p id="coupons-sub">Loading coupons…</p>
+      </div>
+      <div class="pill-row">
+        <a class="btn btn-sm" href="{% url 'store:offers' %}" target="_blank" rel="noopener">Customer offers page</a>
+        <button class="btn btn-sm btn-primary" type="button" id="add-coupon">+ New coupon</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="table-wrap">
+        <table class="data" id="coupons-table">
+          <thead>
+            <tr>
+              <th>Code</th><th>Offer</th><th class="num">Value</th><th class="num">Min order</th>
+              <th>Validity</th><th class="num">Used</th><th>Status</th><th>Actions</th>
+            </tr>
+          </thead>
+          <tbody><tr><td colspan="8" class="muted">Loading…</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card pad">
+        <h2 style="font-size:16px;margin-bottom:8px">How coupons apply</h2>
+        <p class="inline-note" style="line-height:1.7">
+          Coupons are validated server-side at cart apply <em>and</em> again inside the checkout
+          transaction, so a race between two tabs can never double-discount an order. The discount
+          is applied before GST is computed, and delivery charges are calculated on the
+          post-discount subtotal.
+        </p>
+      </div>
+      <div class="card pad">
+        <h2 style="font-size:16px;margin-bottom:8px">Retiring a coupon</h2>
+        <p class="inline-note" style="line-height:1.7">
+          Deleting a coupon that was already used by past orders does not delete history — it is
+          deactivated instead and stays visible on those invoices.
+        </p>
+      </div>
+    </div>
+  </section>
+</div>
+{% endblock %}
+
+{% block scripts %}<script type="module" src="{% static 'js/manage-coupons.js' %}"></script>{% endblock %}

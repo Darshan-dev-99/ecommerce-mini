@@ -1,0 +1,19 @@
+{% extends 'store/base.html' %}
+{% load static %}
+{% block title %}Order tracking — BazaarNoon{% endblock %}
+
+{% block content %}
+<div class="breadcrumb">
+  <a href="/orders/">My orders</a><span>›</span><span>Order tracking</span>
+</div>
+
+<div id="order-root">
+  <div class="card pad"><div class="skeleton sk-line" style="width:30%"></div>
+    <div class="skeleton sk-line"></div><div class="skeleton sk-line" style="width:75%"></div></div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>window.ORDER_ID = {{ order_id }};</script>
+<script type="module" src="{% static 'js/order-detail.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,78 @@
+{% extends 'store/base.html' %}
+{% load static %}
+{% block title %}Shop all products — BazaarNoon{% endblock %}
+
+{% block content %}
+<div class="page-head">
+  <div>
+    <h1 id="shop-title">All products</h1>
+    <p id="shop-sub">Browse the full BazaarNoon catalogue — prices include GST.</p>
+  </div>
+  <form class="search-inline" id="shop-search-form" autocomplete="off">
+    <input id="shop-search" type="search" placeholder="Search within results" aria-label="Search products">
+    <button class="btn btn-primary" type="submit">Search</button>
+  </form>
+</div>
+
+<div class="shop-layout">
+  <aside class="filters card" aria-label="Filters">
+    <div class="filter-group">
+      <h3>Category</h3>
+      <div class="filter-list" id="filter-categories"></div>
+    </div>
+    <div class="filter-group">
+      <h3>Brand</h3>
+      <div class="filter-list" id="filter-brands"></div>
+    </div>
+    <div class="filter-group">
+      <h3>Price (₹)</h3>
+      <div class="price-inputs">
+        <input id="filter-min" type="number" min="0" placeholder="Min" aria-label="Minimum price">
+        <span class="muted">–</span>
+        <input id="filter-max" type="number" min="0" placeholder="Max" aria-label="Maximum price">
+      </div>
+      <button class="btn btn-sm btn-outline btn-block" type="button" id="filter-price-apply" style="margin-top:8px">Apply price</button>
+    </div>
+    <div class="filter-group">
+      <h3>Customer rating</h3>
+      <div class="pill-row" id="filter-rating">
+        <button class="chip" type="button" data-rating="4">4★ &amp; above</button>
+        <button class="chip" type="button" data-rating="3">3★ &amp; above</button>
+      </div>
+    </div>
+    <div class="filter-group">
+      <h3>Discount</h3>
+      <div class="pill-row" id="filter-discount">
+        <button class="chip" type="button" data-discount="10">10%+ off</button>
+        <button class="chip" type="button" data-discount="25">25%+ off</button>
+        <button class="chip" type="button" data-discount="50">50%+ off</button>
+      </div>
+    </div>
+    <div class="filter-group">
+      <label class="check"><input type="checkbox" id="filter-stock"> In stock only</label>
+      <button class="btn btn-sm btn-block" type="button" id="filter-clear" style="margin-top:12px">Clear all filters</button>
+    </div>
+  </aside>
+
+  <section>
+    <div class="card sortbar">
+      <b>Sort by</b>
+      <div class="sort-tabs" id="sort-tabs">
+        <button class="sort-tab" type="button" data-sort="relevance">Relevance</button>
+        <button class="sort-tab" type="button" data-sort="popularity">Popularity</button>
+        <button class="sort-tab" type="button" data-sort="price">Price: low to high</button>
+        <button class="sort-tab" type="button" data-sort="-price">Price: high to low</button>
+        <button class="sort-tab" type="button" data-sort="rating">Rating</button>
+        <button class="sort-tab" type="button" data-sort="newest">Newest first</button>
+        <button class="sort-tab" type="button" data-sort="discount">Discount</button>
+      </div>
+      <span class="result-count" id="result-count"></span>
+    </div>
+    <div class="applied" id="applied"></div>
+    <div class="grid-products" id="shop-grid"></div>
+    <div class="pagination" id="pagination"></div>
+  </section>
+</div>
+{% endblock %}
+
+{% block scripts %}<script type="module" src="{% static 'js/shop.js' %}"></script>{% endblock %}

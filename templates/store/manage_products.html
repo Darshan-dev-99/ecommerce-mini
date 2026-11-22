@@ -1,0 +1,68 @@
+{% extends 'store/base.html' %}
+{% load static %}
+{% block title %}Products — BazaarNoon seller console{% endblock %}
+
+{% block content %}
+<div class="console">
+  {% include 'store/_console_nav.html' %}
+
+  <section class="stack">
+    <div class="page-head">
+      <div>
+        <h1>Catalogue &amp; inventory</h1>
+        <p id="products-sub">Loading the catalogue…</p>
+      </div>
+      <div class="pill-row">
+        <a class="btn btn-sm" href="{% url 'store:shop' %}" target="_blank" rel="noopener">View storefront</a>
+        <button class="btn btn-sm btn-primary" type="button" id="add-product">+ Add product</button>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <form id="product-search-form" style="display:flex;gap:8px;flex:1 1 260px">
+        <input class="input" id="product-search" type="search" placeholder="Search name, SKU or brand" aria-label="Search products">
+        <button class="btn btn-sm btn-primary" type="submit">Search</button>
+      </form>
+      <select class="select" id="product-category" style="max-width:190px" aria-label="Filter by category">
+        <option value="">All categories</option>
+      </select>
+      <select class="select" id="product-sort" style="max-width:170px" aria-label="Sort products">
+        <option value="newest">Newest first</option>
+        <option value="name">Name A–Z</option>
+        <option value="-price">Price high → low</option>
+        <option value="price">Price low → high</option>
+        <option value="popularity">Best selling</option>
+      </select>
+      <label class="chip" id="low-stock-chip" style="cursor:pointer">
+        <input type="checkbox" id="product-low" style="margin:0"> Low stock only
+      </label>
+      <label class="chip" id="inactive-chip" style="cursor:pointer">
+        <input type="checkbox" id="product-inactive" style="margin:0"> Show inactive
+      </label>
+    </div>
+
+    <div class="card">
+      <div class="table-wrap">
+        <table class="data" id="products-table">
+          <thead>
+            <tr>
+              <th>Product</th><th>Category</th><th class="num">Price</th><th class="num">MRP</th>
+              <th class="num">Stock</th><th class="num">Sold</th><th>Status</th><th>Actions</th>
+            </tr>
+          </thead>
+          <tbody><tr><td colspan="8" class="muted">Loading products…</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="pagination" id="product-pagination"></div>
+
+    <p class="inline-note">
+      Prices are GST-inclusive in INR. Stock changes are applied immediately and invalidate the
+      cached catalogue, so shoppers never see a stale “In stock” badge.
+    </p>
+  </section>
+</div>
+{% endblock %}
+
+{% block scripts %}<script type="module" src="{% static 'js/manage-products.js' %}"></script>{% endblock %}
